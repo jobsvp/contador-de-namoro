@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nosso Amor Infinito</title>
+  <!-- Fonte Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+  <style>
+    /* ======== Estilos Gerais ======== */
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #121212; /* Fundo escuro */
+      color: #eee;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      color: #ff4081;
+      margin-bottom: 20px;
+    }
+    .counter-box {
+      background: #1e1e1e;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    .counter-box p {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* ======== Carrossel ======== */
+    .carousel {
+      position: relative;
+      max-width: 1000px;
+      margin: 40px auto 20px;
+      overflow: hidden;
+      border: 2px solid #333;
+      border-radius: 10px;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      touch-action: pan-y; /* Permite arrastar no eixo x */
+    }
+    .carousel-slide {
+      /* Por padrão: 5 slides no desktop */
+      flex: 0 0 calc(100% / 5);
+      padding: 5px;
+      position: relative;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 350px;         /* Altura fixa em telas grandes */
+      object-fit: cover;     /* Preenche o espaço, cortando se preciso */
+      background: #000;
+      border-radius: 8px;
+      display: block;
+      cursor: pointer;
+    }
+    .carousel-caption {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 5px 0;
+      text-align: center;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    /* Botões de navegação do carrossel (telas ≥768px) */
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 2;
+      transition: background 0.3s;
+    }
+    .carousel-button:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
+    .carousel-button.prev {
+      left: 10px;
+    }
+    .carousel-button.next {
+      right: 10px;
+    }
+
+    /* Responsividade - telas médias (até 1024px): 3 slides */
+    @media (max-width: 1024px) {
+      .carousel-slide {
+        flex: 0 0 calc(100% / 3);
+      }
+      .carousel-button {
+        font-size: 1.5rem;
+        padding: 8px;
+      }
+    }
+    /* Responsividade - telas pequenas (até 768px): 1 slide */
+    @media (max-width: 768px) {
+      .carousel-slide {
+        flex: 0 0 100%;
+      }
+      .carousel-button {
+        display: none; /* some com botões: usaremos swipe */
+      }
+      .carousel-slide img {
+        height: auto !important;         /* Ajuste p/ mobile */
+        object-fit: contain !important;  /* Evita cortar demais */
+        max-height: 400px;               /* Limite */
+      }
+    }
+
+    /* ======== Modal Tela Cheia ======== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0; 
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 80vh;
+      margin: auto;
+      display: block;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    .modal-caption {
+      margin: 10px auto;
+      text-align: center;
+      color: #fff;
+      font-size: 1rem; 
+      line-height: 1.3;
+      max-width: 90%;
+      white-space: pre-wrap; /* \n faz quebra de linha */
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .modal-close:hover {
+      color: #ff4081;
+    }
+    /* Setas p/ Navegar no Modal */
+    .modal-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10000;
+      transition: background 0.3s;
+    }
+    .modal-button:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
+    .modal-button-prev {
+      left: 30px;
+    }
+    .modal-button-next {
+      right: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>❤️ Nosso Amor Infinito ❤️</h1>
+
+  <!-- ======== Contadores ======== -->
+  <div class="counter-box" id="yearsBox">
+    <p><strong id="yearsCount"></strong> de namoro</p>
+  </div>
+  <div class="counter-box" id="passedBox">
+    <p><strong id="totalDays"></strong> dias de amor</p>
+    <p><strong id="totalTime"></strong></p>
+  </div>
+  <div class="counter-box" id="nextAnnivBox">
+    <p>Tempo para o próximo aniversário de namoro:</p>
+    <p><strong id="nextAnniv"></strong></p>
+  </div>
+
+  <!-- ======== Carrossel ======== -->
+  <div class="carousel">
+    <button class="carousel-button prev">&#10094;</button>
+    <div class="carousel-track" id="carouselTrack">
+      <!-- 
+         Insira cada mês de 2022/dez até 2025/mai
+         Use data-description para a legenda elaborada que aparecerá no modal
+      -->
+
+      <!-- 2022/dez -->
+      <div 
+        class="carousel-slide" 
+        data-description="Nosso primeiro Natal juntos: muita alegria, beijos e abraços quentinhos!"
+      >
+        <div class="carousel-caption">2022/dez</div>
+        <img src="img/2022dez.jpg" alt="2022/dez">
+      </div>
+
+      <!-- 2023/jan -->
+      <div 
+        class="carousel-slide"
+        data-description="Início de ano, resoluções e muita esperança para o futuro!"
+      >
+        <div class="carousel-caption">2023/jan</div>
+        <img src="img/2023jan.jpg" alt="2023/jan">
+      </div>
+
+      <!-- 2023/fev -->
+      <div 
+        class="carousel-slide"
+        data-description="Fevereiro de carinho, surpresas e ainda mais cumplicidade."
+      >
+        <div class="carousel-caption">2023/fev</div>
+        <img src="img/2023fev.jpg" alt="2023/fev">
+      </div>
+
+      <!-- 2023/mar -->
+      <div 
+        class="carousel-slide"
+        data-description="Mês repleto de aventuras e pequenas loucuras de amor."
+      >
+        <div class="carousel-caption">2023/mar</div>
+        <img src="img/2023mar.jpg" alt="2023/mar">
+      </div>
+
+      <!-- 2023/abr -->
+      <div 
+        class="carousel-slide"
+        data-description="Abril nos trouxe novos desafios, superados com união e apoio mútuo."
+      >
+        <div class="carousel-caption">2023/abr</div>
+        <img src="img/2023abr.jpg" alt="2023/abr">
+      </div>
+
+      <!-- 2023/mai -->
+      <div 
+        class="carousel-slide"
+        data-description="Curtindo dias ensolarados e planejando o futuro com amor."
+      >
+        <div class="carousel-caption">2023/mai</div>
+        <img src="img/2023mai.jpg" alt="2023/mai">
+      </div>
+
+      <!-- 2023/jun -->
+      <div 
+        class="carousel-slide"
+        data-description="Noites de festa, música e a certeza de que somos melhores juntos."
+      >
+        <div class="carousel-caption">2023/jun</div>
+        <img src="img/2023jun.jpg" alt="2023/jun">
+      </div>
+
+      <!-- 2023/jul -->
+      <div 
+        class="carousel-slide"
+        data-description="Descobrindo novos lugares e provando que nosso amor não tem limites."
+      >
+        <div class="carousel-caption">2023/jul</div>
+        <img src="img/2023jul.jpg" alt="2023/jul">
+      </div>
+
+      <!-- 2023/ago -->
+      <div 
+        class="carousel-slide"
+        data-description="Agosto de risadas, abraços e a certeza de um futuro brilhante a dois."
+      >
+        <div class="carousel-caption">2023/ago</div>
+        <img src="img/2023ago.jpg" alt="2023/ago">
+      </div>
+
+      <!-- 2023/set -->
+      <div 
+        class="carousel-slide"
+        data-description="Mês de grandes conquistas e vontade de comemorar cada segundo."
+      >
+        <div class="carousel-caption">2023/set</div>
+        <img src="img/2023set.jpg" alt="2023/set">
+      </div>
+
+      <!-- 2023/out -->
+      <div 
+        class="carousel-slide"
+        data-description="Outubro inspirador, cheio de conversas profundas e laços reforçados."
+      >
+        <div class="carousel-caption">2023/out</div>
+        <img src="img/2023out.jpg" alt="2023/out">
+      </div>
+
+      <!-- 2023/nov -->
+      <div 
+        class="carousel-slide"
+        data-description="Novembro tranquilo, muita cumplicidade e filmes juntinhos."
+      >
+        <div class="carousel-caption">2023/nov</div>
+        <img src="img/2023nov.jpg" alt="2023/nov">
+      </div>
+
+      <!-- 2023/dez -->
+      <div 
+        class="carousel-slide"
+        data-description="Fim de ano novamente, lembrando como somos gratos por esse amor."
+      >
+        <div class="carousel-caption">2023/dez</div>
+        <img src="img/2023dez.jpg" alt="2023/dez">
+      </div>
+
+      <!-- 2024/jan -->
+      <div 
+        class="carousel-slide"
+        data-description="Novo ano, renovamos as energias e reafirmamos nosso compromisso."
+      >
+        <div class="carousel-caption">2024/jan</div>
+        <img src="img/2024jan.jpg" alt="2024/jan">
+      </div>
+
+      <!-- 2024/fev -->
+      <div 
+        class="carousel-slide"
+        data-description="Surpresas românticas e sorrisos que aquecem o coração."
+      >
+        <div class="carousel-caption">2024/fev</div>
+        <img src="img/2024fev.jpg" alt="2024/fev">
+      </div>
+
+      <!-- 2024/mar -->
+      <div 
+        class="carousel-slide"
+        data-description="Março cheio de desafios, mas com muito apoio mútuo e amor incondicional."
+      >
+        <div class="carousel-caption">2024/mar</div>
+        <img src="img/2024mar.jpg" alt="2024/mar">
+      </div>
+
+      <!-- 2024/abr -->
+      <div 
+        class="carousel-slide"
+        data-description="Vivendo cada pequeno instante como se fosse o mais especial."
+      >
+        <div class="carousel-caption">2024/abr</div>
+        <img src="img/2024abr.jpg" alt="2024/abr">
+      </div>
+
+      <!-- 2024/mai -->
+      <div 
+        class="carousel-slide"
+        data-description="Alegria em dobro: sol, abraços e nossos planos tomando forma."
+      >
+        <div class="carousel-caption">2024/mai</div>
+        <img src="img/2024mai.jpg" alt="2024/mai">
+      </div>
+
+      <!-- 2024/jun -->
+      <div 
+        class="carousel-slide"
+        data-description="Mês repleto de conquistas e orgulho por cada passo que damos juntos."
+      >
+        <div class="carousel-caption">2024/jun</div>
+        <img src="img/2024jun.jpg" alt="2024/jun">
+      </div>
+
+      <!-- 2024/jul -->
+      <div 
+        class="carousel-slide"
+        data-description="Curtindo o calor e fortalecendo ainda mais nosso vínculo."
+      >
+        <div class="carousel-caption">2024/jul</div>
+        <img src="img/2024jul.jpg" alt="2024/jul">
+      </div>
+
+      <!-- 2024/ago -->
+      <div 
+        class="carousel-slide"
+        data-description="Agosto inspirador, somando sonhos e dividindo alegrias."
+      >
+        <div class="carousel-caption">2024/ago</div>
+        <img src="img/2024ago.jpg" alt="2024/ago">
+      </div>
+
+      <!-- 2024/set -->
+      <div 
+        class="carousel-slide"
+        data-description="Um setembro de sorrisos e histórias para contar no futuro."
+      >
+        <div class="carousel-caption">2024/set</div>
+        <img src="img/2024set.jpg" alt="2024/set">
+      </div>
+
+      <!-- 2024/out -->
+      <div 
+        class="carousel-slide"
+        data-description="Outubro cheio de criatividade e jantares românticos."
+      >
+        <div class="carousel-caption">2024/out</div>
+        <img src="img/2024out.jpg" alt="2024/out">
+      </div>
+
+      <!-- 2024/nov -->
+      <div 
+        class="carousel-slide"
+        data-description="Dias aconchegantes e conversas que aquecem a alma."
+      >
+        <div class="carousel-caption">2024/nov</div>
+        <img src="img/2024nov.jpg" alt="2024/nov">
+      </div>
+
+      <!-- 2024/dez -->
+      <div 
+        class="carousel-slide"
+        data-description="Encerrando o ano mais uma vez juntos, gratos por tudo."
+      >
+        <div class="carousel-caption">2024/dez</div>
+        <img src="img/2024dez.jpg" alt="2024/dez">
+      </div>
+
+      <!-- 2025/jan -->
+      <div 
+        class="carousel-slide"
+        data-description="Iniciando 2025 com fé, amor e planos maravilhosos!"
+      >
+        <div class="carousel-caption">2025/jan</div>
+        <img src="img/2025jan.jpg" alt="2025/jan">
+      </div>
+
+      <!-- 2025/fev -->
+      <div 
+        class="carousel-slide"
+        data-description="Fevereiro aconchegante, cultivando amor em cada gesto."
+      >
+        <div class="carousel-caption">2025/fev</div>
+        <img src="img/2025fev.jpg" alt="2025/fev">
+      </div>
+
+      <!-- 2025/mar -->
+      <div 
+        class="carousel-slide"
+        data-description="Março com grandes passos em direção ao futuro que sonhamos."
+      >
+        <div class="carousel-caption">2025/mar</div>
+        <img src="img/2025mar.jpg" alt="2025/mar">
+      </div>
+
+      <!-- 2025/abr -->
+      <div 
+        class="carousel-slide"
+        data-description="Abril de sorrisos e leveza, cada dia mais próximos."
+      >
+        <div class="carousel-caption">2025/abr</div>
+        <img src="img/2025abr.jpg" alt="2025/abr">
+      </div>
+
+      <!-- 2025/mai -->
+      <div 
+        class="carousel-slide"
+        data-description="Fechando esse ciclo com a certeza de um amor que só cresce!"
+      >
+        <div class="carousel-caption">2025/mai</div>
+        <img src="img/2025mai.jpg" alt="2025/mai">
+      </div>
+    </div>
+    <button class="carousel-button next">&#10095;</button>
+  </div>
+
+  <!-- ======== Modal: ver a foto em tela cheia ======== -->
+  <div id="imgModal" class="modal">
+    <span class="modal-close" id="closeModal">&times;</span>
+    <button class="modal-button modal-button-prev" id="modalPrev">&#10094;</button>
+    <button class="modal-button modal-button-next" id="modalNext">&#10095;</button>
+
+    <img class="modal-content" id="modalImg" />
+    <div class="modal-caption" id="modalCaption"></div>
+  </div>
+
+  <footer>Feito com amor para sempre!</footer>
+
+  <script>
+    /* ========== Lógica do Contador de Namoro ========== */
+    const startDate = new Date("2022-12-14T00:00:00");
+
+    function getYearMonthDifference(start, now) {
+      let years = now.getFullYear() - start.getFullYear();
+      let months = now.getMonth() - start.getMonth();
+      if (now.getDate() < start.getDate()) {
+        months--;
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+      return { years, months };
+    }
+
+    function updateCounters() {
+      const now = new Date();
+
+      // Anos e meses
+      const diff = getYearMonthDifference(startDate, now);
+      document.getElementById("yearsCount").textContent =
+        `${diff.years} anos e ${diff.months} meses`;
+
+      // Tempo total
+      const diffTotal = now - startDate;
+      const totalDays = Math.floor(diffTotal / (1000 * 60 * 60 * 24));
+      const totalHours = Math.floor((diffTotal % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const totalMinutes = Math.floor((diffTotal % (1000 * 60 * 60)) / (1000 * 60));
+      const totalSeconds = Math.floor((diffTotal % (1000 * 60)) / 1000);
+
+      document.getElementById("totalDays").textContent = `${totalDays} dias`;
+      document.getElementById("totalTime").textContent =
+        `${totalDays} dias, ` +
+        `${String(totalHours).padStart(2, '0')} horas, ` +
+        `${String(totalMinutes).padStart(2, '0')} minutos, ` +
+        `${String(totalSeconds).padStart(2, '0')} segundos`;
+
+      // Próximo aniversário
+      let currentAnniv = new Date(now.getFullYear(), startDate.getMonth(), startDate.getDate());
+      if (now >= currentAnniv) {
+        currentAnniv = new Date(now.getFullYear() + 1, startDate.getMonth(), startDate.getDate());
+      }
+      const diffNext = currentAnniv - now;
+      const daysNext = Math.floor(diffNext / (1000 * 60 * 60 * 24));
+      const hoursNext = Math.floor((diffNext % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutesNext = Math.floor((diffNext % (1000 * 60 * 60)) / (1000 * 60));
+      const secondsNext = Math.floor((diffNext % (1000 * 60)) / 1000);
+
+      document.getElementById("nextAnniv").textContent =
+        `${daysNext} dias, ` +
+        `${String(hoursNext).padStart(2, '0')} horas, ` +
+        `${String(minutesNext).padStart(2, '0')} minutos, ` +
+        `${String(secondsNext).padStart(2, '0')} segundos`;
+    }
+
+    setInterval(updateCounters, 1000);
+    updateCounters();
+
+    /* ========== Carrossel Responsivo + Swipe ========== */
+    function getVisibleCount() {
+      if (window.innerWidth < 768) return 1;  
+      else if (window.innerWidth < 1024) return 3; 
+      else return 5;                            
+    }
+
+    const track = document.getElementById("carouselTrack");
+    const slides = Array.from(track.children);
+    const nextButton = document.querySelector(".carousel-button.next");
+    const prevButton = document.querySelector(".carousel-button.prev");
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      const visibleCount = getVisibleCount();
+      const carouselWidth = document.querySelector('.carousel').offsetWidth;
+      const slideWidth = carouselWidth / visibleCount;
+      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    }
+
+    // Botão "Avançar"
+    nextButton.addEventListener('click', () => {
+      const visibleCount = getVisibleCount();
+      if (currentIndex < slides.length - visibleCount) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    });
+
+    // Botão "Voltar"
+    prevButton.addEventListener('click', () => {
+      const visibleCount = getVisibleCount();
+      if (currentIndex > 0) {
+        currentIndex--;
+      } else {
+        currentIndex = slides.length - visibleCount;
+      }
+      updateCarousel();
+    });
+
+    // Auto-play a cada 5s
+    setInterval(() => {
+      const visibleCount = getVisibleCount();
+      if (currentIndex < slides.length - visibleCount) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    }, 5000);
+
+    window.addEventListener('resize', updateCarousel);
+
+    // Swipe no celular
+    let startX = 0;
+    let isDragging = false;
+
+    track.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    });
+    track.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+    });
+    track.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const endX = e.changedTouches[0].clientX;
+      const diff = endX - startX;
+      const threshold = 50; // Distância mínima p/ swipe
+      if (diff > threshold) {
+        // Direita => voltar
+        const visibleCount = getVisibleCount();
+        if (currentIndex > 0) {
+          currentIndex--;
+        } else {
+          currentIndex = slides.length - visibleCount;
+        }
+        updateCarousel();
+      } else if (diff < -threshold) {
+        // Esquerda => avançar
+        const visibleCount = getVisibleCount();
+        if (currentIndex < slides.length - visibleCount) {
+          currentIndex++;
+        } else {
+          currentIndex = 0;
+        }
+        updateCarousel();
+      }
+    });
+
+    /* ========== Modal para Tela Cheia + Navegar ========== */
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const modalCaption = document.getElementById("modalCaption");
+    const closeModal = document.getElementById("closeModal");
+    const modalPrev = document.getElementById("modalPrev");
+    const modalNext = document.getElementById("modalNext");
+
+    let currentModalIndex = 0; 
+
+    function openModal(index) {
+      currentModalIndex = index;
+      const slide = slides[currentModalIndex];
+      const img = slide.querySelector("img");
+      const dateText = slide.querySelector(".carousel-caption").textContent;
+      const descText = slide.getAttribute("data-description") || "";
+
+      // Exibe data e descrição em linhas separadas
+      modal.style.display = "flex";
+      modalImg.src = img.src; 
+      modalCaption.textContent = `${dateText}\n${descText}`;
+    }
+
+    // Ao clicar em cada img => abre modal
+    slides.forEach((slide, i) => {
+      const img = slide.querySelector("img");
+      img.addEventListener("click", () => {
+        openModal(i);
+      });
+    });
+
+    // Fechar modal (botão X ou clique fora da img)
+    closeModal.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    // Navegar no modal
+    modalPrev.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (currentModalIndex > 0) {
+        currentModalIndex--;
+      } else {
+        currentModalIndex = slides.length - 1;
+      }
+      openModal(currentModalIndex);
+    });
+    modalNext.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (currentModalIndex < slides.length - 1) {
+        currentModalIndex++;
+      } else {
+        currentModalIndex = 0;
+      }
+      openModal(currentModalIndex);
+    });
+  </script>
+</body>
+</html>
