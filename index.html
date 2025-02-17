@@ -2,31 +2,19 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Nosso Amor Infinito</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Fonte Roboto -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  
   <style>
-    /* ======== Estilos Gerais ======== */
-    * {
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box;
-    }
     body {
-      font-family: 'Roboto', sans-serif;
-      background: #121212; /* Fundo escuro */
+      background: #121212;
       color: #eee;
-      text-align: center;
+      font-family: 'Roboto', sans-serif;
       padding: 20px;
     }
-    h1 {
-      font-size: 2.8rem;
-      color: #ff4081;
-      margin-bottom: 20px;
-    }
-    /* Container principal com estilo aprimorado */
     .main-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -34,6 +22,14 @@
       background: #1e1e1e;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #ff4081;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      font-weight: bold;
     }
     .counter-box {
       background: #1e1e1e;
@@ -44,385 +40,297 @@
       max-width: 600px;
     }
     .counter-box p {
-      margin: 10px 0;
       font-size: 1.2rem;
+      margin: 10px 0;
     }
     footer {
       margin-top: 20px;
       font-size: 0.9rem;
       color: #aaa;
     }
-
-    /* ======== Carrossel ======== */
-    .carousel {
-      position: relative;
-      max-width: 1000px;
-      margin: 40px auto 20px;
-      overflow: hidden;
-      border: 2px solid #333;
-      border-radius: 10px;
-    }
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
-      touch-action: pan-y; /* Permite arrastar no eixo x */
-    }
-    .carousel-slide {
-      /* Por padrão: 5 slides no desktop */
-      flex: 0 0 calc(100% / 5);
-      padding: 5px;
-      position: relative;
-    }
-    .carousel-slide img {
+    /* Carousel custom */
+    .carousel-item img {
+      max-height: 400px;
+      object-fit: cover;
       width: 100%;
-      height: 350px;         /* Altura fixa para telas grandes */
-      object-fit: cover;      /* Preenche o espaço, recortando se necessário */
-      background: #000;
-      border-radius: 8px;
-      display: block;
-      cursor: pointer;
     }
     .carousel-caption {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 1.1rem;
-      padding: 5px 0;
-      text-align: center;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      background: rgba(0,0,0,0.5);
+      padding: 15px;
+      border-radius: 5px;
     }
-
-    /* Botões de navegação do carrossel (para desktop e tablet) */
-    .carousel-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
-      color: #fff;
-      font-size: 2rem;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 50%;
-      z-index: 2;
-      transition: background 0.3s;
-    }
-    .carousel-button:hover {
-      background: rgba(0, 0, 0, 0.9);
-    }
-    .carousel-button.prev {
-      left: 10px;
-    }
-    .carousel-button.next {
-      right: 10px;
-    }
-
-    /* Responsividade: telas médias (até 1024px) - 3 slides */
-    @media (max-width: 1024px) {
-      .carousel-slide {
-        flex: 0 0 calc(100% / 3);
-      }
-      .carousel-button {
-        font-size: 1.5rem;
-        padding: 8px;
-      }
-    }
-    /* Responsividade: telas pequenas (até 768px) - 1 slide */
-    @media (max-width: 768px) {
-      .carousel-slide {
-        flex: 0 0 100%;
-      }
-      .carousel-button {
-        display: none; /* Oculta os botões; usa swipe */
-      }
-      .carousel-slide img {
-        height: auto !important;
-        object-fit: contain !important;
-        max-height: 400px;
-      }
-    }
-
-    /* ======== Modal para Tela Cheia ======== */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0; 
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      overflow: auto;
-    }
-    /* Estrutura interna do modal: imagem + info */
-    .modal-body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      width: 90%;
-    }
-    .modal-content {
-      flex: 1;
-      max-width: 70%;
-      max-height: 80vh;
-      border-radius: 8px;
-      object-fit: contain;
-    }
-    .modal-info {
-      flex: 0 0 30%;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 20px;
-      border-radius: 8px;
-      text-align: left;
-    }
-    .modal-date {
+    .carousel-caption h5 {
       font-size: 1.8rem;
       font-weight: bold;
-      margin-bottom: 10px;
     }
-    /* Para mobile, empilhamos verticalmente */
-    @media (max-width: 768px) {
-      .modal-body {
-        flex-direction: column;
-      }
-      .modal-content {
-        max-width: 100%;
-      }
-      .modal-info {
-        width: 100%;
-        text-align: center;
-      }
-      .modal-date {
-        font-size: 1.4rem;
-      }
+    .carousel-caption p {
+      font-size: 1rem;
+      margin: 0;
     }
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 2rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .modal-close:hover {
-      color: #ff4081;
-    }
-    /* Setas para navegação no modal */
-    .modal-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      border: none;
-      color: #fff;
-      font-size: 2rem;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-radius: 50%;
-      z-index: 10000;
-      transition: background 0.3s;
-    }
-    .modal-button:hover {
-      background: rgba(0, 0, 0, 0.9);
-    }
-    .modal-button-prev {
-      left: 30px;
-    }
-    .modal-button-next {
-      right: 30px;
-    }
-    h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  color: #ff4081;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-  letter-spacing: 0.05em;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
   </style>
 </head>
 <body>
   <div class="main-container">
-    <h1>❤️ Nosso Amor Infinito</h1>
+    <h1>❤️ Nosso Amor Infinito ❤️</h1>
 
-    <!-- ======== Contadores ======== -->
-    <div class="counter-box" id="yearsBox">
+    <!-- Contadores -->
+    <div class="counter-box text-center" id="yearsBox">
       <p><strong id="yearsCount"></strong> de namoro</p>
     </div>
-    <div class="counter-box" id="passedBox">
+    <div class="counter-box text-center" id="passedBox">
       <p><strong id="totalDays"></strong> dias de amor</p>
       <p><strong id="totalTime"></strong></p>
     </div>
-    <div class="counter-box" id="nextAnnivBox">
+    <div class="counter-box text-center" id="nextAnnivBox">
       <p>Tempo para o próximo aniversário de namoro:</p>
       <p><strong id="nextAnniv"></strong></p>
     </div>
 
-    <!-- ======== Carrossel (Dez/2022 a Mai/2025) ======== -->
-    <div class="carousel">
-      <button class="carousel-button prev">&#10094;</button>
-      <div class="carousel-track" id="carouselTrack">
-        <!-- 2022/dez -->
-        <div class="carousel-slide" data-description="Nosso primeiro Natal juntos: muita alegria, beijos e abraços quentinhos!">
-          <div class="carousel-caption">2022/dez</div>
-          <img src="img/2022dez.jpg" alt="2022/dez">
+    <!-- Carousel Bootstrap -->
+    <div id="amorCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <!-- Slide 1: 2022/dez -->
+        <div class="carousel-item active">
+          <img src="img/2022dez.jpg" class="d-block w-100" alt="2022/dez">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2022/dez</h5>
+            <p>Nosso primeiro Natal juntos: muita alegria, beijos e abraços quentinhos!</p>
+          </div>
         </div>
-        <!-- 2023/jan -->
-        <div class="carousel-slide" data-description="Início de ano, resoluções e muita esperança para o futuro!">
-          <div class="carousel-caption">2023/jan</div>
-          <img src="img/2023jan.jpg" alt="2023/jan">
+        <!-- Slide 2: 2023/jan -->
+        <div class="carousel-item">
+          <img src="img/2023jan.jpg" class="d-block w-100" alt="2023/jan">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/jan</h5>
+            <p>Início de ano, resoluções e muita esperança para o futuro!</p>
+          </div>
         </div>
-        <!-- 2023/fev -->
-        <div class="carousel-slide" data-description="Fevereiro de carinho, surpresas e ainda mais cumplicidade.">
-          <div class="carousel-caption">2023/fev</div>
-          <img src="img/2023fev.jpg" alt="2023/fev">
+        <!-- Slide 3: 2023/fev -->
+        <div class="carousel-item">
+          <img src="img/2023fev.jpg" class="d-block w-100" alt="2023/fev">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/fev</h5>
+            <p>Fevereiro de carinho, surpresas e ainda mais cumplicidade.</p>
+          </div>
         </div>
-        <!-- 2023/mar -->
-        <div class="carousel-slide" data-description="Mês repleto de aventuras e pequenas loucuras de amor.">
-          <div class="carousel-caption">2023/mar</div>
-          <img src="img/2023mar.jpg" alt="2023/mar">
+        <!-- Slide 4: 2023/mar -->
+        <div class="carousel-item">
+          <img src="img/2023mar.jpg" class="d-block w-100" alt="2023/mar">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/mar</h5>
+            <p>Mês repleto de aventuras e pequenas loucuras de amor.</p>
+          </div>
         </div>
-        <!-- 2023/abr -->
-        <div class="carousel-slide" data-description="Abril nos trouxe novos desafios, superados com união e apoio mútuo.">
-          <div class="carousel-caption">2023/abr</div>
-          <img src="img/2023abr.jpg" alt="2023/abr">
+        <!-- Slide 5: 2023/abr -->
+        <div class="carousel-item">
+          <img src="img/2023abr.jpg" class="d-block w-100" alt="2023/abr">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/abr</h5>
+            <p>Abril nos trouxe desafios superados com união e apoio mútuo.</p>
+          </div>
         </div>
-        <!-- 2023/mai -->
-        <div class="carousel-slide" data-description="Curtindo dias ensolarados e planejando o futuro com amor.">
-          <div class="carousel-caption">2023/mai</div>
-          <img src="img/2023mai.jpg" alt="2023/mai">
+        <!-- Slide 6: 2023/mai -->
+        <div class="carousel-item">
+          <img src="img/2023mai.jpg" class="d-block w-100" alt="2023/mai">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/mai</h5>
+            <p>Curtindo dias ensolarados e planejando um futuro repleto de amor.</p>
+          </div>
         </div>
-        <!-- 2023/jun -->
-        <div class="carousel-slide" data-description="Noites de festa, música e a certeza de que somos melhores juntos.">
-          <div class="carousel-caption">2023/jun</div>
-          <img src="img/2023jun.jpg" alt="2023/jun">
+        <!-- Slide 7: 2023/jun -->
+        <div class="carousel-item">
+          <img src="img/2023jun.jpg" class="d-block w-100" alt="2023/jun">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/jun</h5>
+            <p>Noites de festa, música e a certeza de que somos perfeitos juntos.</p>
+          </div>
         </div>
-        <!-- 2023/jul -->
-        <div class="carousel-slide" data-description="Descobrindo novos lugares e provando que nosso amor não tem limites.">
-          <div class="carousel-caption">2023/jul</div>
-          <img src="img/2023jul.jpg" alt="2023/jul">
+        <!-- Slide 8: 2023/jul -->
+        <div class="carousel-item">
+          <img src="img/2023jul.jpg" class="d-block w-100" alt="2023/jul">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/jul</h5>
+            <p>Descobrindo novos lugares e provando que nosso amor não tem limites.</p>
+          </div>
         </div>
-        <!-- 2023/ago -->
-        <div class="carousel-slide" data-description="Agosto de risadas, abraços e a certeza de um futuro brilhante a dois.">
-          <div class="carousel-caption">2023/ago</div>
-          <img src="img/2023ago.jpg" alt="2023/ago">
+        <!-- Slide 9: 2023/ago -->
+        <div class="carousel-item">
+          <img src="img/2023ago.jpg" class="d-block w-100" alt="2023/ago">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/ago</h5>
+            <p>Agosto de risadas, abraços e a certeza de um futuro brilhante.</p>
+          </div>
         </div>
-        <!-- 2023/set -->
-        <div class="carousel-slide" data-description="Mês de grandes conquistas e vontade de comemorar cada segundo.">
-          <div class="carousel-caption">2023/set</div>
-          <img src="img/2023set.jpg" alt="2023/set">
+        <!-- Slide 10: 2023/set -->
+        <div class="carousel-item">
+          <img src="img/2023set.jpg" class="d-block w-100" alt="2023/set">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/set</h5>
+            <p>Mês de conquistas e de celebrar cada segundo ao seu lado.</p>
+          </div>
         </div>
-        <!-- 2023/out -->
-        <div class="carousel-slide" data-description="Outubro inspirador, cheio de conversas profundas e laços reforçados.">
-          <div class="carousel-caption">2023/out</div>
-          <img src="img/2023out.jpg" alt="2023/out">
+        <!-- Slide 11: 2023/out -->
+        <div class="carousel-item">
+          <img src="img/2023out.jpg" class="d-block w-100" alt="2023/out">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/out</h5>
+            <p>Outubro inspirador com conversas profundas e laços fortalecidos.</p>
+          </div>
         </div>
-        <!-- 2023/nov -->
-        <div class="carousel-slide" data-description="Novembro tranquilo, muita cumplicidade e filmes juntinhos.">
-          <div class="carousel-caption">2023/nov</div>
-          <img src="img/2023nov.jpg" alt="2023/nov">
+        <!-- Slide 12: 2023/nov -->
+        <div class="carousel-item">
+          <img src="img/2023nov.jpg" class="d-block w-100" alt="2023/nov">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/nov</h5>
+            <p>Novembro tranquilo, cheio de cumplicidade e momentos de cinema em casa.</p>
+          </div>
         </div>
-        <!-- 2023/dez -->
-        <div class="carousel-slide" data-description="Fim de ano, relembrando cada momento especial que vivemos.">
-          <div class="carousel-caption">2023/dez</div>
-          <img src="img/2023dez.jpg" alt="2023/dez">
+        <!-- Slide 13: 2023/dez -->
+        <div class="carousel-item">
+          <img src="img/2023dez.jpg" class="d-block w-100" alt="2023/dez">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2023/dez</h5>
+            <p>Fim de ano, relembrando cada momento especial que vivemos.</p>
+          </div>
         </div>
-        <!-- 2024/jan -->
-        <div class="carousel-slide" data-description="Novo ano, renovamos as energias e reafirmamos nosso compromisso.">
-          <div class="carousel-caption">2024/jan</div>
-          <img src="img/2024jan.jpg" alt="2024/jan">
+        <!-- Slide 14: 2024/jan -->
+        <div class="carousel-item">
+          <img src="img/2024jan.jpg" class="d-block w-100" alt="2024/jan">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/jan</h5>
+            <p>Novo ano, renovando energias e reafirmando nosso compromisso.</p>
+          </div>
         </div>
-        <!-- 2024/fev -->
-        <div class="carousel-slide" data-description="Surpresas românticas e sorrisos que aquecem o coração.">
-          <div class="carousel-caption">2024/fev</div>
-          <img src="img/2024fev.jpg" alt="2024/fev">
+        <!-- Slide 15: 2024/fev -->
+        <div class="carousel-item">
+          <img src="img/2024fev.jpg" class="d-block w-100" alt="2024/fev">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/fev</h5>
+            <p>Fevereiro com surpresas românticas e muitos sorrisos.</p>
+          </div>
         </div>
-        <!-- 2024/mar -->
-        <div class="carousel-slide" data-description="Março cheio de desafios, mas sempre juntos, lado a lado.">
-          <div class="carousel-caption">2024/mar</div>
-          <img src="img/2024mar.jpg" alt="2024/mar">
+        <!-- Slide 16: 2024/mar -->
+        <div class="carousel-item">
+          <img src="img/2024mar.jpg" class="d-block w-100" alt="2024/mar">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/mar</h5>
+            <p>Março cheio de desafios, mas sempre lado a lado.</p>
+          </div>
         </div>
-        <!-- 2024/abr -->
-        <div class="carousel-slide" data-description="Vivendo cada instante com intensidade e carinho.">
-          <div class="carousel-caption">2024/abr</div>
-          <img src="img/2024abr.jpg" alt="2024/abr">
+        <!-- Slide 17: 2024/abr -->
+        <div class="carousel-item">
+          <img src="img/2024abr.jpg" class="d-block w-100" alt="2024/abr">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/abr</h5>
+            <p>Vivendo cada instante com intensidade e carinho.</p>
+          </div>
         </div>
-        <!-- 2024/mai -->
-        <div class="carousel-slide" data-description="Alegria em dobro: sol, abraços e sonhos que se realizam.">
-          <div class="carousel-caption">2024/mai</div>
-          <img src="img/2024mai.jpg" alt="2024/mai">
+        <!-- Slide 18: 2024/mai -->
+        <div class="carousel-item">
+          <img src="img/2024mai.jpg" class="d-block w-100" alt="2024/mai">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/mai</h5>
+            <p>Alegria em dobro: sol, abraços e sonhos que se realizam.</p>
+          </div>
         </div>
-        <!-- 2024/jun -->
-        <div class="carousel-slide" data-description="Mês de conquistas e orgulho por cada passo dado juntos.">
-          <div class="carousel-caption">2024/jun</div>
-          <img src="img/2024jun.jpg" alt="2024/jun">
+        <!-- Slide 19: 2024/jun -->
+        <div class="carousel-item">
+          <img src="img/2024jun.jpg" class="d-block w-100" alt="2024/jun">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/jun</h5>
+            <p>Mês de conquistas e orgulho por cada passo dado juntos.</p>
+          </div>
         </div>
-        <!-- 2024/jul -->
-        <div class="carousel-slide" data-description="Curtindo o calor e fortalecendo nosso laço inquebrável.">
-          <div class="carousel-caption">2024/jul</div>
-          <img src="img/2024jul.jpg" alt="2024/jul">
+        <!-- Slide 20: 2024/jul -->
+        <div class="carousel-item">
+          <img src="img/2024jul.jpg" class="d-block w-100" alt="2024/jul">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/jul</h5>
+            <p>Curtindo o calor e fortalecendo nosso laço inquebrável.</p>
+          </div>
         </div>
-        <!-- 2024/ago -->
-        <div class="carousel-slide" data-description="Agosto: sonhos compartilhados e planos que se concretizam.">
-          <div class="carousel-caption">2024/ago</div>
-          <img src="img/2024ago.jpg" alt="2024/ago">
+        <!-- Slide 21: 2024/ago -->
+        <div class="carousel-item">
+          <img src="img/2024ago.jpg" class="d-block w-100" alt="2024/ago">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/ago</h5>
+            <p>Agosto: sonhos compartilhados e planos que se concretizam.</p>
+          </div>
         </div>
-        <!-- 2024/set -->
-        <div class="carousel-slide" data-description="Setembro repleto de sorrisos e histórias para recordar.">
-          <div class="carousel-caption">2024/set</div>
-          <img src="img/2024set.jpg" alt="2024/set">
+        <!-- Slide 22: 2024/set -->
+        <div class="carousel-item">
+          <img src="img/2024set.jpg" class="d-block w-100" alt="2024/set">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/set</h5>
+            <p>Setembro repleto de sorrisos e histórias para recordar.</p>
+          </div>
         </div>
-        <!-- 2024/out -->
-        <div class="carousel-slide" data-description="Outubro com criatividade, amor e jantares memoráveis.">
-          <div class="carousel-caption">2024/out</div>
-          <img src="img/2024out.jpg" alt="2024/out">
+        <!-- Slide 23: 2024/out -->
+        <div class="carousel-item">
+          <img src="img/2024out.jpg" class="d-block w-100" alt="2024/out">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/out</h5>
+            <p>Outubro com criatividade, amor e jantares memoráveis.</p>
+          </div>
         </div>
-        <!-- 2024/nov -->
-        <div class="carousel-slide" data-description="Novembro: momentos aconchegantes e muita cumplicidade.">
-          <div class="carousel-caption">2024/nov</div>
-          <img src="img/2024nov.jpg" alt="2024/nov">
+        <!-- Slide 24: 2024/nov -->
+        <div class="carousel-item">
+          <img src="img/2024nov.jpg" class="d-block w-100" alt="2024/nov">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/nov</h5>
+            <p>Novembro: momentos aconchegantes e muita cumplicidade.</p>
+          </div>
         </div>
-        <!-- 2024/dez -->
-        <div class="carousel-slide" data-description="Dezembro de gratidão, encerrando o ano com amor e alegria.">
-          <div class="carousel-caption">2024/dez</div>
-          <img src="img/2024dez.jpg" alt="2024/dez">
+        <!-- Slide 25: 2024/dez -->
+        <div class="carousel-item">
+          <img src="img/2024dez.jpg" class="d-block w-100" alt="2024/dez">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2024/dez</h5>
+            <p>Encerrando o ano com gratidão e amor sem fim.</p>
+          </div>
         </div>
-        <!-- 2025/jan -->
-        <div class="carousel-slide" data-description="Iniciando 2025 com fé, amor e grandes sonhos!">
-          <div class="carousel-caption">2025/jan</div>
-          <img src="img/2025jan.jpg" alt="2025/jan">
+        <!-- Slide 26: 2025/jan -->
+        <div class="carousel-item">
+          <img src="img/2025jan.jpg" class="d-block w-100" alt="2025/jan">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2025/jan</h5>
+            <p>Iniciando 2025 com fé, amor e grandes sonhos!</p>
+          </div>
         </div>
-        <!-- 2025/fev -->
-        <div class="carousel-slide" data-description="Fevereiro aconchegante, cultivando amor em cada gesto.">
-          <div class="carousel-caption">2025/fev</div>
-          <img src="img/2025fev.jpg" alt="2025/fev">
+        <!-- Slide 27: 2025/fev -->
+        <div class="carousel-item">
+          <img src="img/2025fev.jpg" class="d-block w-100" alt="2025/fev">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2025/fev</h5>
+            <p>Fevereiro aconchegante, cultivando amor em cada gesto.</p>
+          </div>
         </div>
-        <!-- 2025/mar -->
-        <div class="carousel-slide" data-description="Março com passos firmes rumo ao futuro que sonhamos.">
-          <div class="carousel-caption">2025/mar</div>
-          <img src="img/2025mar.jpg" alt="2025/mar">
+        <!-- Slide 28: 2025/mar -->
+        <div class="carousel-item">
+          <img src="img/2025mar.jpg" class="d-block w-100" alt="2025/mar">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2025/mar</h5>
+            <p>Março com passos firmes rumo ao futuro que sonhamos.</p>
+          </div>
         </div>
-        <!-- 2025/abr -->
-        <div class="carousel-slide" data-description="Abril repleto de sorrisos e esperança renovada.">
-          <div class="carousel-caption">2025/abr</div>
-          <img src="img/2025abr.jpg" alt="2025/abr">
+        <!-- Slide 29: 2025/abr -->
+        <div class="carousel-item">
+          <img src="img/2025abr.jpg" class="d-block w-100" alt="2025/abr">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2025/abr</h5>
+            <p>Abril repleto de sorrisos e esperança renovada.</p>
+          </div>
         </div>
-        <!-- 2025/mai -->
-        <div class="carousel-slide" data-description="Maio: fechando esse ciclo com a certeza de um amor que só cresce!">
-          <div class="carousel-caption">2025/mai</div>
-          <img src="img/2025mai.jpg" alt="2025/mai">
+        <!-- Slide 30: 2025/mai -->
+        <div class="carousel-item">
+          <img src="img/2025mai.jpg" class="d-block w-100" alt="2025/mai">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>2025/mai</h5>
+            <p>Fechando esse ciclo com a certeza de um amor que só cresce!</p>
+          </div>
         </div>
       </div>
-      <button class="carousel-button next">&#10095;</button>
+      <button class="carousel-button next" type="button" data-bs-target="#amorCarousel" data-bs-slide="next">&#10095;</button>
     </div>
 
     <!-- ======== Modal: Tela Cheia com Navegação e Apenas Data ======== -->
@@ -460,6 +368,7 @@
 
     function updateCounters() {
       const now = new Date();
+
       // Anos e meses
       const diff = getYearMonthDifference(startDate, now);
       document.getElementById("yearsCount").textContent =
@@ -571,9 +480,8 @@
       isDragging = false;
       const endX = e.changedTouches[0].clientX;
       const diff = endX - startX;
-      const threshold = 50; // Distância mínima para swipe
+      const threshold = 50;
       if (diff > threshold) {
-        // Direita => voltar
         const visibleCount = getVisibleCount();
         if (currentIndex > 0) {
           currentIndex--;
@@ -582,7 +490,6 @@
         }
         updateCarousel();
       } else if (diff < -threshold) {
-        // Esquerda => avançar
         const visibleCount = getVisibleCount();
         if (currentIndex < slides.length - visibleCount) {
           currentIndex++;
@@ -608,13 +515,11 @@
       const slide = slides[currentModalIndex];
       const img = slide.querySelector("img");
       const dateText = slide.querySelector(".carousel-caption").textContent;
-      // Exibe somente a data, de forma elegante
       modal.style.display = "flex";
       modalImg.src = img.src; 
       modalDate.textContent = dateText;
     }
 
-    // Ao clicar em cada imagem, abrir o modal
     slides.forEach((slide, i) => {
       const img = slide.querySelector("img");
       img.addEventListener("click", () => {
@@ -622,7 +527,6 @@
       });
     });
 
-    // Fechar modal (botão X ou clique fora da imagem)
     closeModal.addEventListener("click", () => {
       modal.style.display = "none";
     });
@@ -632,7 +536,6 @@
       }
     });
 
-    // Navegar no modal: botão anterior
     modalPrev.addEventListener("click", (e) => {
       e.stopPropagation();
       if (currentModalIndex > 0) {
@@ -642,7 +545,6 @@
       }
       openModal(currentModalIndex);
     });
-    // Navegar no modal: botão próximo
     modalNext.addEventListener("click", (e) => {
       e.stopPropagation();
       if (currentModalIndex < slides.length - 1) {
